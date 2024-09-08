@@ -33,7 +33,7 @@ end)
 vim.opt.breakindent = true
 
 -- Save undo history
-vim.opt.undofile = true
+vim.opt.undofile = false
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
@@ -372,6 +372,7 @@ require('lazy').setup({
       { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
+      'hrsh7th/nvim-cmp',
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -575,6 +576,15 @@ require('lazy').setup({
           end,
         },
       }
+
+      require('lspconfig').eslint.setup {
+        on_attach = function(client, bufnr)
+          vim.api.nvim_create_autocmd('BufWritePre', {
+            buffer = bufnr,
+            command = 'EslintFixAll',
+          })
+        end,
+      }
     end,
   },
 
@@ -612,11 +622,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
@@ -841,6 +847,20 @@ require('lazy').setup({
     'pmizio/typescript-tools.nvim',
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
     opts = {},
+    config = function()
+      require('typescript-tools').setup {
+        on_attach = function(client)
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+        end,
+        settings = {
+          jsx_close_tag = {
+            enable = true,
+            filetypes = { 'javascriptreact', 'typescriptreact' },
+          },
+        },
+      }
+    end,
   },
 }, {
   ui = {
