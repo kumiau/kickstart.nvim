@@ -1,3 +1,13 @@
+-- ░▀█░█████████████████▀▀░░░██░████
+-- ▄▄█████████████████▀░░░░░░██░████
+-- ███▀▀████████████▀░░░░░░░▄█░░████
+-- ███▄░░░░▀▀█████▀░▄▀▄░░░░▄█░░▄████
+-- ░███▄▄░░▄▀▄░▀███▄▀▀░░▄▄▀█▀░░█████
+-- ▄▄█▄▀█▄▄░▀▀████████▀███░░▄░██████
+-- ▀████▄▀▀▀██▀▀██▀▀██░░▀█░░█▄█████░
+-- ░░▀▀███▄░▀█░░▀█░░░▀░█░░░▄██████░▄
+-- ████▄▄▀██▄▄▄░█▄▄░▄█▄█▄███████░░░█
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -25,9 +35,6 @@ vim.opt.mouse = ''
 vim.o.showmode = false
 
 -- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
 vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
@@ -83,7 +90,7 @@ vim.o.confirm = true
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
-vim.keymap.set('n', ';', ':')
+vim.keymap.set('n', ';', ':', { desc = 'Remap Ex command to ;' })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -600,7 +607,7 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
-
+        -- astro = {},
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -942,6 +949,25 @@ require('lazy').setup({
         },
       }
     end,
+  },
+
+  -- Tabs
+  {
+    'romgrk/barbar.nvim',
+    dependencies = {
+      'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
+      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+    },
+    init = function()
+      vim.g.barbar_auto_setup = false
+    end,
+    opts = {
+      -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
+      -- animation = true,
+      -- insert_at_start = true,
+      -- …etc.
+    },
+    version = '^1.0.0', -- optional: only update when a new 1.x version is released
   },
 }, {
   ui = {
