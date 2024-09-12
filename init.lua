@@ -1,3 +1,13 @@
+-- ░▀█░█████████████████▀▀░░░██░████
+-- ▄▄█████████████████▀░░░░░░██░████
+-- ███▀▀████████████▀░░░░░░░▄█░░████
+-- ███▄░░░░▀▀█████▀░▄▀▄░░░░▄█░░▄████
+-- ░███▄▄░░▄▀▄░▀███▄▀▀░░▄▄▀█▀░░█████
+-- ▄▄█▄▀█▄▄░▀▀████████▀███░░▄░██████
+-- ▀████▄▀▀▀██▀▀██▀▀██░░▀█░░█▄█████░
+-- ░░▀▀███▄░▀█░░▀█░░░▀░█░░░▄██████░▄
+-- ████▄▄▀██▄▄▄░█▄▄░▄█▄█▄███████░░░█
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -8,9 +18,6 @@ vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
--- See `:help vim.opt`
--- NOTE: You can change these options as you wish!
---  For more options, you can see `:help option-list`
 
 -- Make line numbers default
 vim.opt.number = true
@@ -22,9 +29,6 @@ vim.opt.mouse = ''
 vim.opt.showmode = false
 
 -- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
 vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
@@ -71,7 +75,7 @@ vim.opt.scrolloff = 10
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
-vim.keymap.set('n', ';', ':')
+vim.keymap.set('n', ';', ':', { desc = 'Remap Ex command to ;' })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -519,19 +523,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
-        --
-
+        -- astro = {},
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -861,6 +853,25 @@ require('lazy').setup({
         },
       }
     end,
+  },
+
+  -- Tabs
+  {
+    'romgrk/barbar.nvim',
+    dependencies = {
+      'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
+      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+    },
+    init = function()
+      vim.g.barbar_auto_setup = false
+    end,
+    opts = {
+      -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
+      -- animation = true,
+      -- insert_at_start = true,
+      -- …etc.
+    },
+    version = '^1.0.0', -- optional: only update when a new 1.x version is released
   },
 }, {
   ui = {
