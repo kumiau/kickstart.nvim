@@ -377,6 +377,7 @@ require('lazy').setup({
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
       'hrsh7th/nvim-cmp',
+      'olrtg/emmet-language-server',
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -523,7 +524,12 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- astro = {},
+        astro = {},
+        cssls = {},
+        jsonls = {},
+        emmet_language_server = {
+          filetypes = { 'css', 'eruby', 'html', 'javascript', 'javascriptreact', 'less', 'sass', 'scss', 'pug', 'typescriptreact', 'typescript' },
+        },
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -554,6 +560,7 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
       })
+
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
@@ -812,9 +819,9 @@ require('lazy').setup({
   --
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -824,7 +831,7 @@ require('lazy').setup({
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   -- { import = 'custom.plugins' },
 
-  -- Theme
+  -- Themes
   {
     'catppuccin/nvim',
     name = 'catppuccin',
@@ -832,6 +839,12 @@ require('lazy').setup({
     init = function()
       vim.cmd [[colorscheme catppuccin-macchiato]]
     end,
+  },
+  {
+    'glenntnorton/adaryn.vim',
+  },
+  {
+    'Evalir/dosbox-vim-colorscheme',
   },
 
   -- Typescript tools
@@ -864,6 +877,8 @@ require('lazy').setup({
     },
     init = function()
       vim.g.barbar_auto_setup = false
+      vim.keymap.set('n', '<C-n>', '<cmd>BufferNext<CR>')
+      vim.keymap.set('n', '<C-b>', '<cmd>BufferPrevious<CR>')
     end,
     opts = {
       -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
@@ -871,7 +886,16 @@ require('lazy').setup({
       -- insert_at_start = true,
       -- …etc.
     },
+
     version = '^1.0.0', -- optional: only update when a new 1.x version is released
+  },
+
+  -- Emmet
+  {
+    'olrtg/nvim-emmet',
+    config = function()
+      vim.keymap.set({ 'n', 'v' }, '<leader>xe', require('nvim-emmet').wrap_with_abbreviation, { desc = '[e]mmet' })
+    end,
   },
 }, {
   ui = {
