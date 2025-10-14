@@ -65,7 +65,7 @@ end)
 vim.o.breakindent = true
 
 -- Save undo history
-vim.o.undofile = true
+vim.o.undofile = false
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.ignorecase = true
@@ -291,6 +291,11 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+      },
+
+      triggers = {
+        { '<auto>', mode = 'nixsotc' },
+        { 's', mode = { 'n', 'v' } },
       },
     },
   },
@@ -905,10 +910,21 @@ require('lazy').setup({
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
       --
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      -- - gsa)  - [S]urround [A]dd [I]nner [W]ord [)]Paren
+      -- - gsd'  - [S]urround [D]elete [']quotes
+      -- - gsr)' - [S]urround [R]eplace [)] [']
+      require('mini.surround').setup {
+        mappings = {
+          add = 'gsa',
+          delete = 'gsd',
+          replace = 'gsr',
+          find = 'gsf',
+          highlight = 'gsh',
+          update_n_lines = 'gsn',
+          suffix_last = 'l',
+          suffix_next = 'n',
+        },
+      }
       require('mini.comment').setup()
 
       -- Simple and easy statusline.
